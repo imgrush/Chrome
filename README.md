@@ -1,6 +1,6 @@
-# MediaCrush for Chrome
+# Imgrush Extension for Chrome
 
-This is the official MediaCrush extension for Chrome.
+This is the official Imgrush extension for Chrome which is a fock of MediaCrush.
 
 With this extension, you can upload any image to MediaCrush from any website, simply by right-clicking it.
 
