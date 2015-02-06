@@ -2,14 +2,14 @@ function getNotificationOptions(message) {
     return {
         type: "basic",
         message: message,
-        title: "MediaCrush",
+        title: "imgrush",
         iconUrl: "icon48.png"
     };
 }
 
 function rehostImage(info, tab) {
     var xhr = new XMLHttpRequest();
-    xhr.open('POST', 'https://mediacru.sh/api/upload/url');
+    xhr.open('POST', 'https://imgrush.com/api/upload/url');
     var notificationId = -1;
     chrome.notifications.create("", getNotificationOptions("Processing, please wait..."), function(id) {
         notificationId = id;
@@ -18,7 +18,7 @@ function rehostImage(info, tab) {
         var result = JSON.parse(this.responseText);
         if (this.status == 409) {
             chrome.notifications.clear(notificationId, function (ok) {});
-            window.open('https://mediacru.sh/' + result.hash, '_blank');
+            window.open('https://imgrush.com/' + result.hash, '_blank');
         } else if (this.status == 200) {
             setTimeout(function() {
                 checkStatus(result.hash, notificationId);
@@ -35,7 +35,7 @@ function rehostImage(info, tab) {
 
 function checkStatus(hash, notificationId) {
     var xhr = new XMLHttpRequest();
-    xhr.open('GET', 'https://mediacru.sh/api/' + hash + '/status');
+    xhr.open('GET', 'https://imgrush.com/api/' + hash + '/status');
     xhr.onload = function() {
         var result = JSON.parse(this.responseText);
         if (result.status == "error") {
@@ -46,7 +46,7 @@ function checkStatus(hash, notificationId) {
             chrome.notifications.create("", getNotificationOptions('This file took too long to process.'), function(id) {});
         } else if (result.status == "done") {
             chrome.notifications.clear(notificationId, function (ok) {});
-            window.open('https://mediacru.sh/' + result.hash + '#fromExtension', '_blank');
+            window.open('https://imgrush.com/' + result.hash + '#fromExtension', '_blank');
         } else {
             setTimeout(function() { checkStatus(hash, notificationId); }, 1000);
         }
@@ -54,4 +54,4 @@ function checkStatus(hash, notificationId) {
     xhr.send();
 }
 
-chrome.contextMenus.create({ title: 'Rehost on MediaCrush', contexts: [ 'image' ], onclick: rehostImage });
+chrome.contextMenus.create({ title: 'Rehost on Imgrush', contexts: [ 'image' ], onclick: rehostImage });
